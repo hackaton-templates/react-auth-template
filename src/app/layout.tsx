@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import PageHeader from "@/components/page-header";
+import PageFooter from "@/components/page-footer";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,11 +17,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const classes = cn(inter.className, "min-h-screen flex flex-col");
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={classes}>
         <PageHeader />
         <section className="px-6 py-4">{children}</section>
+        <PageFooter className="mt-auto" />
       </body>
     </html>
   );
