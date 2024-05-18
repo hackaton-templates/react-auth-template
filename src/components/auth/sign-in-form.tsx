@@ -23,6 +23,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import authService from "@/services/auth.service";
+import authStorageService from "@/services/auth-storage.service";
+import { useToast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
 
 export default function SignInForm() {
   const form = useForm<z.infer<typeof signInForm>>({
@@ -32,9 +36,25 @@ export default function SignInForm() {
       password: "",
     },
   });
+  const router = useRouter();
+  const { toast } = useToast();
 
   const handleSubmit: SubmitHandler<SignInDto> = async (data) => {
-    // TODO
+    try {
+      const authResult = await authService.signIn(data);
+      authStorageService.set(authResult);
+      toast({
+        title: "Вход выполнен",
+        description: `Добро пожаловать, ${data.username}!`,
+      });
+      router.push("/");
+    } catch (e) {
+      toast({
+        variant: "destructive",
+        title: "Ошибка",
+        description: "Неправильный логин/пароль",
+      });
+    }
   };
 
   return (
