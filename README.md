@@ -1,8 +1,27 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# react-auth-template
+
+Шаблон приложения на NextJS с встроенной авторизацией
+
+⚠ Приложение требует API-сервер, см. необходимую схему в `openapi.yaml` или [онлайн-просмотр](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/hackaton-templates/react-auth-template/main/openapi.yaml)
+
+## Использованные библиотеки:
+
+- [TailwindCSS](https://tailwindcss.com/) - UI-фреймворк
+- [@shancn/ui](https://ui.shadcn.com/) - UI-компоненты
+- [@mdi/react](https://pictogrammers.com/library/mdi/) - Набор иконок Material Design
+- [zod](https://zod.dev/) - Валидатор форм
+- [axios](https://axios-http.com/docs/intro) - для работы с API, удобные перехватчики
+- cookies-next - немного упрощает работу с cookie на Next
 
 ## Getting Started
 
-First, run the development server:
+First, setup environment variables (see `.env.example`):
+
+```
+NEXT_PUBLIC_API_URL=
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
@@ -15,10 +34,6 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
 ## Learn More
 

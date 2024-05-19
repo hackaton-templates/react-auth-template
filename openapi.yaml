@@ -1,0 +1,134 @@
+openapi: 3.0.3
+info:
+  title: react-auth-template - OpenAPI 3.0
+  description: |-
+    Шаблон Frontend-приложения на NextJS с встроенной авторизацией
+  version: 1.0.0
+servers:
+  - url: /
+tags:
+  - name: auth
+    description: Авторизация
+paths:
+  /auth:
+    post:
+      tags:
+        - auth
+      summary: Вход на сайт
+      operationId: signIn
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInDto'
+      responses:
+        '200':
+          description: Успешный вход
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResult'    
+        '401':
+          description: Неправильный логин/пароль
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthFailed'    
+  /auth/me:
+    get:
+      tags:
+        - auth
+      summary: Получение профиля пользователя
+      responses:
+        '200':
+          description: Профиль пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthFailed'    
+      security:
+        - bearerAuth: []
+  /auth/refresh:
+    post:
+      tags:
+        - auth
+      summary: Запрос на обновление токена
+      description: Требует передачи Refresh Token в заголовке Authorization
+      responses:
+        '200':
+          description: Объект, содержащий обновленные токены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResult'
+        '401':
+          description: Ошибка авторизации - вероятно, токен истёк
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthFailed'  
+      security:
+        - bearerRefreshAuth: []              
+components:
+  schemas:
+    SignInDto:
+      required:
+        - username
+        - password
+      type: object
+      properties:
+        username:
+          type: string
+          example: "StarPanda"
+        password:
+          type: string
+          example: "123123"
+    AuthResult:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 1
+        access_token:
+          $ref: '#/components/schemas/Token'
+        refresh_token:
+          $ref: '#/components/schemas/Token'
+    AuthFailed:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Unauthorized"
+    Token:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxNjExMzc2OCwianRpIjoiNzJhNTZlZmYtMmY3Ny00ZWM2LWJiNzEtODUwNzM5NzUzNjc0IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNzE2MTEzNzY4LCJjc3JmIjoiMjI1MmFlZTgtZTg3Ni00NDA0LWIzNmItOWRmNTc0NmM5MDYwIiwiZXhwIjoxNzE2MTEzNzc4fQ.znaY0tThN8GXXGTTPd0KuILeVxbQGLuqlw1Vpo32aCI"
+        expires:
+          type: integer
+          example: 1716117368
+    User:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "StarPanda"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    bearerRefreshAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
