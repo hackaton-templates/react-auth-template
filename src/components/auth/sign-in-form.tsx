@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/form";
 import authService from "@/services/auth.service";
 import authStorageService from "@/services/auth-storage.service";
+import userStorageService from "@/services/user-storage.service";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 
@@ -43,9 +44,13 @@ export default function SignInForm() {
     try {
       const authResult = await authService.signIn(data);
       authStorageService.set(authResult);
+
+      const user = await authService.getMe(authResult);
+      userStorageService.set(user);
+
       toast({
         title: "Вход выполнен",
-        description: `Добро пожаловать, ${data.username}!`,
+        description: `Добро пожаловать, ${user.name}!`,
       });
       router.push("/");
     } catch (e) {

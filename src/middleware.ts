@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { CookieResponseHandler } from "./lib/cookie";
 import authStorageService from "./services/auth-storage.service";
+import userStorageService from "./services/user-storage.service";
 import authService from "./services/auth.service";
 import { type AuthResult } from "./types/auth.type";
 
@@ -26,6 +27,7 @@ function signout(request: NextRequest) {
   const response = NextResponse.redirect(new URL("/signin", request.nextUrl));
   const handler = new CookieResponseHandler(response);
   authStorageService.remove({ cookieHandler: handler });
+  userStorageService.remove({ cookieHandler: handler });
   return response;
 }
 
