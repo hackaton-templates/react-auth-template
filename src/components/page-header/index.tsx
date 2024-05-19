@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import Icon from "@mdi/react";
 import { mdiMenu } from "@mdi/js";
 import CurrentTime from "./current-time";
+import UserProfile from "./user-profile";
+import ClientOnly from "../client-only";
 
 export default function PageHeader() {
   const pathname = usePathname();
@@ -51,7 +53,9 @@ export default function PageHeader() {
       </Sheet>
 
       <CurrentTime className="hidden sm:block" />
-      <div></div>
+      <ClientOnly>
+        <UserProfile />
+      </ClientOnly>
     </header>
   );
 }
