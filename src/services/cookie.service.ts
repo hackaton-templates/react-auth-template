@@ -1,4 +1,8 @@
-import { CookieHandler, CookieNextHandler } from "@/lib/cookie";
+import {
+  CookieHandler,
+  CookieMixedHandler,
+  CookieNextHandler,
+} from "@/lib/cookie";
 import { type cookies } from "next/headers";
 
 type NextCookies = typeof cookies;
@@ -33,7 +37,12 @@ export class CookieService {
   }
 
   private _getHandler(cookies: CookieOpts) {
-    if (cookies.cookieHandler != undefined) return cookies.cookieHandler;
+    if (cookies.cookies !== undefined) {
       return new CookieNextHandler(cookies.cookies);
+    }
+    if (cookies.cookieHandler !== undefined) {
+      return cookies.cookieHandler;
+    }
+    return new CookieMixedHandler();
   }
 }
