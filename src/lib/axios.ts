@@ -3,7 +3,6 @@ import { API_URL } from "./env";
 import authStorageService from "@/services/auth-storage.service";
 import authService from "@/services/auth.service";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 
 const api = axios.create({
   baseURL: API_URL,
@@ -12,13 +11,13 @@ const api = axios.create({
 });
 
 // Provide access token to all requests
-api.interceptors.request.use((config) => {
+api.interceptors.request.use(async (config) => {
   if (config.headers.get("x-skip-token")) {
     // This header indicates that we should skip token insertion
     return config;
   }
 
-  const authResult = authStorageService.get({ cookies });
+  const authResult = await authStorageService.get();
   if (authResult) {
     config.headers.Authorization = `Bearer ${authResult.access_token.token}`;
   }
@@ -38,7 +37,7 @@ api.interceptors.response.use(
       const originalRequest = error.config;
       originalRequest._isRetry = true;
 
-      const authResult = authStorageService.get({ cookies });
+      const authResult = await authStorageService.get();
       if (!authResult) {
         return redirect("/signout");
       }

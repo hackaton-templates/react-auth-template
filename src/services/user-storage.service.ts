@@ -6,12 +6,12 @@ class UserStorageService extends CookieService {
     super("user");
   }
 
-  get(cookies?: CookieOpts) {
-    return super.get(cookies) as User | null;
+  async get(cookies?: CookieOpts) {
+    return (await super.get(cookies)) as User | null;
   }
 
-  set(data: User, cookies?: CookieOpts): void {
-    return super.set(data, cookies);
+  async set(data: User, cookies?: CookieOpts) {
+    return await super.set(data, cookies);
   }
 }
 
