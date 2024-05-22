@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { initials } from "@/lib/utils";
 import userStorageService from "@/services/user-storage.service";
@@ -7,13 +9,17 @@ import * as AlertDialog from "@/components/ui/alert-dialog";
 import Icon from "@mdi/react";
 import { mdiLogout } from "@mdi/js";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { User } from "@/types/user.type";
 
 export default function UserProfile() {
   const [dialogOpened, setDialogOpened] = useState<boolean>();
+  const [user, setUser] = useState<User>();
 
-  const user = userStorageService.get();
-  if (!user) return <div></div>;
+  useEffect(() => {
+    userStorageService.get().then((data) => setUser(data!));
+  }, [setUser]);
+  if (!user) return <div className="h-10 w-10"></div>;
 
   const letters = initials(user.name);
   return (
