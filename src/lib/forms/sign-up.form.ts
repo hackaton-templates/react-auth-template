@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export default z
   .object({
-    username: z.string().min(4),
+    name: z.string().min(4),
     password: z.string().min(6),
     confirm: z.string().min(6),
     email: z.string().email(),
