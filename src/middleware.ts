@@ -14,7 +14,7 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    "/((?!_next/static|_next/image|favicon.ico).*)",
+    "/((?!signup|_next/static|_next/image|favicon.ico).*)",
   ],
 };
 
@@ -23,11 +23,11 @@ function signin(request: NextRequest, authResult: AuthResult | null) {
   return NextResponse.redirect(new URL("/", request.nextUrl));
 }
 
-function signout(request: NextRequest) {
+async function signout(request: NextRequest) {
   const response = NextResponse.redirect(new URL("/signin", request.nextUrl));
   const handler = new CookieResponseHandler(response);
-  authStorageService.remove({ cookieHandler: handler });
-  userStorageService.remove({ cookieHandler: handler });
+  await authStorageService.remove({ cookieHandler: handler });
+  await userStorageService.remove({ cookieHandler: handler });
   return response;
 }
 
@@ -42,30 +42,32 @@ async function refresh(
     response = NextResponse.next();
 
     const handler = new CookieResponseHandler(response);
-    authStorageService.set(authResultRefreshed, { cookieHandler: handler });
+    await authStorageService.set(authResultRefreshed, {
+      cookieHandler: handler,
+    });
   } catch (e) {
     response = NextResponse.redirect(new URL("/signin", request.nextUrl));
 
     const handler = new CookieResponseHandler(response);
-    authStorageService.remove({ cookieHandler: handler });
+    await authStorageService.remove({ cookieHandler: handler });
   }
   return Promise.resolve(response);
 }
 
 export async function middleware(request: NextRequest) {
-  const authResult = authStorageService.get({ cookies });
+  const authResult = await authStorageService.get({ cookies });
 
   if (request.nextUrl.pathname == "/signin") {
     return signin(request, authResult);
   }
   if (request.nextUrl.pathname == "/signout") {
-    return signout(request);
+    return await signout(request);
   }
 
   if (!authResult)
     return NextResponse.redirect(new URL("/signin", request.nextUrl));
 
-  const needRefresh = authStorageService.needRefresh({ cookies });
+  const needRefresh = await authStorageService.needRefresh({ cookies });
   if (!needRefresh) {
     return NextResponse.next();
   }

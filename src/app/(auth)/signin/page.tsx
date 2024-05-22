@@ -4,6 +4,7 @@ import * as Alert from "@/components/ui/alert-dialog";
 import SignInForm from "@/components/auth/sign-in-form";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Page() {
   const [alertOpened, setAlertOpened] = useState(false);
@@ -18,8 +19,8 @@ export default function Page() {
       >
         Забыли пароль?
       </Button>
-      <Button className="h-6 opacity-75" variant="link">
-        Регистрация
+      <Button className="h-6 opacity-75" variant="link" asChild>
+        <Link href="/signup">Регистрация</Link>
       </Button>
 
       <Alert.AlertDialog open={alertOpened} onOpenChange={setAlertOpened}>

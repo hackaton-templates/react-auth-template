@@ -1,8 +1,10 @@
 # react-auth-template
 
-Шаблон приложения на NextJS с встроенной авторизацией
+Шаблон приложения на NextJS с встроенной авторизацией и регистрацией
 
 ⚠ Приложение требует API-сервер, см. необходимую схему в `openapi.yaml` или [онлайн-просмотр](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/hackaton-templates/react-auth-template/main/openapi.yaml)
+
+✅ [Подходящий шаблон API-сервера](https://github.com/hackaton-templates/nest-auth-template) на NestJS
 
 ## Использованные библиотеки:
 

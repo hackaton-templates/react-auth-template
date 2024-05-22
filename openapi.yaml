@@ -4,11 +4,12 @@ info:
   description: |-
     Шаблон Frontend-приложения на NextJS с встроенной авторизацией
   version: 1.0.0
-servers:
-  - url: /
+servers: []
 tags:
   - name: auth
     description: Авторизация
+  - name: users
+    description: Работа с пользователями
 paths:
   /auth:
     post:
@@ -20,38 +21,38 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SignInDto'
+              $ref: "#/components/schemas/SignInDto"
       responses:
-        '200':
+        "200":
           description: Успешный вход
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResult'    
-        '401':
+                $ref: "#/components/schemas/AuthResult"
+        "401":
           description: Неправильный логин/пароль
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthFailed'    
+                $ref: "#/components/schemas/AuthFailed"
   /auth/me:
     get:
       tags:
         - auth
       summary: Получение профиля пользователя
       responses:
-        '200':
+        "200":
           description: Профиль пользователя
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '401':
+                $ref: "#/components/schemas/User"
+        "401":
           description: Не авторизован
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthFailed'    
+                $ref: "#/components/schemas/AuthFailed"
       security:
         - bearerAuth: []
   /auth/refresh:
@@ -61,31 +62,45 @@ paths:
       summary: Запрос на обновление токена
       description: Требует передачи Refresh Token в заголовке Authorization
       responses:
-        '200':
+        "200":
           description: Объект, содержащий обновленные токены
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResult'
-        '401':
+                $ref: "#/components/schemas/AuthResult"
+        "401":
           description: Ошибка авторизации - вероятно, токен истёк
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthFailed'  
+                $ref: "#/components/schemas/AuthFailed"
       security:
-        - bearerRefreshAuth: []              
+        - bearerRefreshAuth: []
+  /users:
+    post:
+      tags:
+        - users
+      summary: Регистрация нового пользователя
+      responses:
+        "201":
+          description: Успешная регистрация
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "409":
+          description: Email уже используется
 components:
   schemas:
     SignInDto:
       required:
-        - username
+        - email
         - password
       type: object
       properties:
-        username:
+        email:
           type: string
-          example: "StarPanda"
+          example: "user@example.com"
         password:
           type: string
           example: "123123"
@@ -96,9 +111,9 @@ components:
           type: integer
           example: 1
         access_token:
-          $ref: '#/components/schemas/Token'
+          $ref: "#/components/schemas/Token"
         refresh_token:
-          $ref: '#/components/schemas/Token'
+          $ref: "#/components/schemas/Token"
     AuthFailed:
       type: object
       properties:
@@ -117,12 +132,15 @@ components:
     User:
       type: object
       properties:
-        user_id:
+        id:
           type: integer
           example: 1
         name:
           type: string
           example: "StarPanda"
+        email:
+          type: string
+          example: "user@example.com"
   securitySchemes:
     bearerAuth:
       type: http

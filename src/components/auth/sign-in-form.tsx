@@ -33,7 +33,7 @@ export default function SignInForm() {
   const form = useForm<z.infer<typeof signInForm>>({
     resolver: zodResolver(signInForm),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
@@ -73,10 +73,10 @@ export default function SignInForm() {
           <CardContent>
             <FormField
               control={form.control}
-              name="username"
+              name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Имя пользователя</FormLabel>
+                  <FormLabel>Электронная почта</FormLabel>
                   <FormControl>
                     <Input placeholder="user@example.com" {...field} />
                   </FormControl>

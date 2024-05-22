@@ -6,8 +6,8 @@ class AuthStorageService extends CookieService {
     super("auth");
   }
 
-  needRefresh(cookies: CookieOpts = {}) {
-    const authResult = this.get(cookies);
+  async needRefresh(cookies: CookieOpts = {}) {
+    const authResult = await this.get(cookies);
     if (!authResult)
       throw Error("Failed to get auth data. Maybe you are not authorized.");
 
@@ -16,12 +16,12 @@ class AuthStorageService extends CookieService {
     return expires - now <= 0;
   }
 
-  get(cookies?: CookieOpts) {
-    return super.get(cookies) as AuthResult | null;
+  async get(cookies?: CookieOpts) {
+    return (await super.get(cookies)) as AuthResult | null;
   }
 
-  set(data: AuthResult, cookies?: CookieOpts): void {
-    return super.set(data, cookies);
+  async set(data: AuthResult, cookies?: CookieOpts) {
+    return await super.set(data, cookies);
   }
 }
 
