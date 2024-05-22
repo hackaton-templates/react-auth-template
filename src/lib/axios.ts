@@ -33,7 +33,7 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(
   (config) => config,
   async (error) => {
-    if (error.response.status === 401 && !error.config._isRetry) {
+    if (error.response?.status === 401 && !error.config._isRetry) {
       const originalRequest = error.config;
       originalRequest._isRetry = true;
 
@@ -54,7 +54,7 @@ api.interceptors.response.use(
       } catch (e) {
         return redirect("/signout");
       }
-    } else if (error.response.status === 401 && error.config._isRetry) {
+    } else if (error.response?.status === 401 && error.config._isRetry) {
       return redirect("/signout");
     }
 
